@@ -1,1 +1,5 @@
 # Services.Shortener
+
+## Shorten
+
+## Redirect
