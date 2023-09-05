@@ -1,4 +1,5 @@
 ﻿namespace Devblogs.Shortener.Filters;
+
 public class RedirectEndpointFilter : IEndpointFilter
 {
     private readonly UrlShortenerSetting _setting;
