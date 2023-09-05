@@ -1,6 +1,4 @@
-﻿using Devblogs.Shortener.Interfaces;
-
-namespace Devblogs.Shortener.Data;
+﻿namespace Devblogs.Shortener.Data;
 
 public class TagRepository : ITagRepository
 {
@@ -38,6 +36,4 @@ public class TagRepository : ITagRepository
      
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
         => await _shortenerDbContext.SaveChangesAsync(cancellationToken) > 0;
-
-
 }
