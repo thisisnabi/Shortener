@@ -6,5 +6,5 @@ public interface ITagRepository
     Task<(bool found, string? value)> TryGetLongUrlAsync(string shortCode, CancellationToken cancellationToken);
     Task<(bool found, string? value)> TryGetShortUrlAsync(string longUrl, CancellationToken cancellationToken);
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
-
+    Task<bool> HasCodeAsync(string candidateCode);
 }

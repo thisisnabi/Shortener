@@ -36,4 +36,13 @@ public class TagRepository : ITagRepository
      
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
         => await _shortenerDbContext.SaveChangesAsync(cancellationToken) > 0;
+
+    public async Task<bool> HasCodeAsync(string candidateCode)
+    {
+        // check cache
+
+        // check 
+
+        return false;
+    }
 }

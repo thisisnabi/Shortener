@@ -6,13 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-    app.UseDeveloperExceptionPage();
-
     app.MapPost("/shorten", async ([FromBody] ShortenRequest request,
         IUrlShortenerService urlShortenerService,
         CancellationToken cancellationToken) =>
     {
-        var shortUrl = await urlShortenerService.ShortenUrlAsync(request.Url, cancellationToken);
+        var shortUrl = await urlShortenerService.ShortenUrlAsync(request.url, cancellationToken);
         return Results.Ok(new { ShortUrl = shortUrl });
     }).AddEndpointFilter<ShortenEndpointFilter>();
 

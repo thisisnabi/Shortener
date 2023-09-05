@@ -19,6 +19,24 @@ public sealed class UrlShortenerService : IUrlShortenerService
         _cache = cache;
     }
 
+    public async Task<string> ShortenUrlAsync(string longUrl, CancellationToken cancellationToken)
+    {
+        var getUrlResult = await TryGetShortUrlAsync(longUrl, cancellationToken);
+        if (getUrlResult.found)
+        {
+            return UrlResponseCombination(getUrlResult.value!);
+        }
+
+        var shortCode = GenerateShortCode(longUrl);
+
+        var link = Tag.Create(shortCode, longUrl);
+        await _linkRepository.AddAsync(link, cancellationToken);
+        await _linkRepository.SaveChangesAsync(cancellationToken);
+
+        SetCacheEntry(shortCode, longUrl);
+        return UrlResponseCombination(shortCode);
+    }
+
     public async Task<(bool found, string? value)> TryGetLongUrlAsync(string shortCode,
         CancellationToken cancellationToken)
     {
@@ -53,45 +71,6 @@ public sealed class UrlShortenerService : IUrlShortenerService
         }
 
         return (false, null);
-    }
-
-    public async Task<string> ShortenUrlAsync(string longUrl, CancellationToken cancellationToken)
-    {
-        var getUrlResult = await TryGetShortUrlAsync(longUrl, cancellationToken);
-        if (getUrlResult.found)
-        {
-            return UrlResponseCombination(getUrlResult.value!);
-        }
-
-        var shortCode = GenerateShortCode(longUrl);
-
-        var link = Tag.Create(shortCode, longUrl);
-        await _linkRepository.AddAsync(link, cancellationToken);
-        await _linkRepository.SaveChangesAsync(cancellationToken);
-
-        SetCacheEntry(shortCode, longUrl);
-        return UrlResponseCombination(shortCode);
-    }
-
-    private string GenerateShortCode(string longUrl)
-    {
-        using (MD5 md5 = MD5.Create())
-        {
-            byte[] hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
-            string hashCode = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-
-            for (int i = 0; i <= hashCode.Length - _shortenerSetting.ShortCodeLength; i++)
-            {
-                string candidateCode = hashCode.Substring(i, _shortenerSetting.ShortCodeLength);
-
-                if (!shortToLongUrlMap.ContainsKey(candidateCode))
-                {
-                    return candidateCode;
-                }
-            }
-
-            throw new Exception(Constants.Data.ExceptionMessage.FailedGenerateUniqCode);
-        }
     }
 
     private void SetCacheEntry(string shortCode, string longUrl)
