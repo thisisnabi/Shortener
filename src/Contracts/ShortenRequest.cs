@@ -1,3 +1,3 @@
 ﻿namespace Devblogs.Shortener.Contracts;
 
-public sealed record ShortenRequest(string Url);
+public sealed record ShortenRequest(string url);
