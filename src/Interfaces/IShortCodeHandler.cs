@@ -2,5 +2,5 @@
 
 public interface IShortCodeHandler
 {
-    Task<string> GenerateShortCodeAsync(string longUrl, int length);
+    Task<string> GenerateAsync(string longUrl, int length);
 }

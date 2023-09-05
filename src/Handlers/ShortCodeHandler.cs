@@ -8,7 +8,7 @@ public class ShortCodeHandler : IShortCodeHandler
         _tagRepository = tagRepository;
     }
 
-    public async Task<string> GenerateShortCodeAsync(string longUrl, int length)
+    public async Task<string> GenerateAsync(string longUrl, int length)
     {
         using (MD5 md5 = MD5.Create())
         {

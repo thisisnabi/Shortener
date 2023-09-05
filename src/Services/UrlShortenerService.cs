@@ -5,18 +5,21 @@ public sealed class UrlShortenerService : IUrlShortenerService
     private readonly UrlShortenerSetting _shortenerSetting;
     private readonly ITagRepository _linkRepository;
     private readonly IMemoryCache _cache;
+    private readonly IShortCodeHandler _shortCodeHandler;
 
     private Dictionary<string, string> shortToLongUrlMap;
 
     public UrlShortenerService(
         IOptions<UrlShortenerSetting> shortenerSettingOptions,
         ITagRepository linkRepository,
-        IMemoryCache cache)
+        IMemoryCache cache,
+        IShortCodeHandler shortCodeHandler)
     {
         _shortenerSetting = shortenerSettingOptions.Value;
         shortToLongUrlMap = new Dictionary<string, string>();
         _linkRepository = linkRepository;
         _cache = cache;
+        _shortCodeHandler = shortCodeHandler;
     }
 
     public async Task<string> ShortenUrlAsync(string longUrl, CancellationToken cancellationToken)
@@ -27,7 +30,7 @@ public sealed class UrlShortenerService : IUrlShortenerService
             return UrlResponseCombination(getUrlResult.value!);
         }
 
-        var shortCode = GenerateShortCode(longUrl);
+        var shortCode = await _shortCodeHandler.GenerateAsync(longUrl, _shortenerSetting.ShortCodeLength);
 
         var link = Tag.Create(shortCode, longUrl);
         await _linkRepository.AddAsync(link, cancellationToken);
