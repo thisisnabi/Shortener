@@ -7,4 +7,10 @@ public static class Constants
         // TODO: Fix message
         public const string FailedGenerateUniqueCode = "FailedGenerateUniqueCode";
     }
+
+    public static class Validation
+    {
+        // TODO: Fix message
+        public const string InvalidShortenRequestUrl = "InvalidShortenRequestUrl";
+    }
 }

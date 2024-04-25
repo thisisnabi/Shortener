@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shortener;
 using Shortener.Contracts;
+using Shortener.Filters;
 using Shortener.Persistence;
 using Shortener.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+ 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -31,11 +34,8 @@ builder.Services.AddDbContext<ShortenerDbContext>(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -46,9 +46,10 @@ app.MapPost("/shorten", async (
     CancellationToken cancellationToken
     ) =>
 {
+     
     return await shortenService.GenerateShortenUrlAsync(request.Url, cancellationToken);
-});
- 
+}).AddEndpointFilter<ShortenEndpointFilter>();
+
 app.MapGet("/{short_code}", async (
     [FromRoute(Name = "short_code")] string ShortCode,
     ShortenUrlService shortenService,
@@ -56,10 +57,10 @@ app.MapGet("/{short_code}", async (
     ) =>
 {
     var destinationUrl = await shortenService.GetDestinationUrlAsync(ShortCode, cancellationToken);
-     
+
     return Results.Redirect(destinationUrl);
 });
- 
+
 app.Run();
 
 

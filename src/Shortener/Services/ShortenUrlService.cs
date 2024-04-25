@@ -36,7 +36,10 @@ public class ShortenUrlService
         };
 
         await _dbContext.Links.AddAsync(link, cancellation);
+  
         await _dbContext.SaveChangesAsync(cancellation);
+
+
 
         return $"{_appSettings.BaseUrl}/{shortenCode}";
     }
@@ -74,7 +77,7 @@ public class ShortenUrlService
             _memoryCache.Set(shortCode, link.DestinationUrl);
             return link.DestinationUrl;
         }
-
+         
         // TODO: Please decluare a custom exception
         throw new Exception("Invalid shorten code!");
     }
