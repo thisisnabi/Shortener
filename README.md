@@ -43,7 +43,43 @@ The primary problem with `long URLs` is their lack of user-friendliness and prac
 
 To address the problem of long URLs and make them more manageable for users, a URL shortener service provides an effective solution. By condensing lengthy URLs into shorter, more concise forms, users can easily share and access links across various platforms and communication channels. 
 
+
 ![image](https://github.com/thisisnabi/Shortener/assets/3371886/35fce872-feaf-4f14-bc58-54f72433e7c0)
+
+
+### Shortening URLs
+Implement a URL shortening algorithm to generate unique, short codes or aliases for long URLs. This algorithm should produce short codes that are both compact and unlikely to collide with existing codes in the system.
+![image](https://github.com/thisisnabi/Shortener/assets/3371886/9d53ddd5-b68a-4899-9843-3d3b4185de18)
+
+```csharp
+public async Task<string> GenerateShortenUrlAsync(string destinationUrl, CancellationToken cancellation)
+{
+    var shortenCode = GenerateCode(destinationUrl);
+
+    var link = new Link
+    {
+        CreatedOn = DateTime.UtcNow,
+        DestinationUrl = destinationUrl,
+        ShortenCode = shortenCode
+    };
+
+    await _dbContext.Links.AddAsync(link, cancellation);
+    await _dbContext.SaveChangesAsync(cancellation);
+
+    return $"{_appSettings.BaseUrl}/{shortenCode}";
+}
+```
+
+
+
+
+
+
+### Redirection Mechanism
+
+
+
+
 
 
 ## License
