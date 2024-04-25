@@ -23,3 +23,21 @@ This is a URL shortener service implemented in ASP.NET Core and MongoDB. It allo
 
 ```bash
 git clone https://github.com/thisisnabi/Shortener.git
+```
+
+## Give a Star! ⭐
+If you find this project helpful or interesting, please consider giving it a star on GitHub. It helps to support the project and gives recognition to the contributors.
+
+
+## Getting Started
+To get started with the URL shortener service, follow the installation instructions provided in the Installation section above. Once the service is up and running, you can begin using the API endpoints to shorten URLs, track statistics, and manage your shortened links.
+
+
+
+
+
+## License
+This project is licensed under the MIT License: [MIT License](https://opensource.org/licenses/MIT).
+
+## Stay Connected
+Feel free to raise any questions or suggestions through GitHub issues.
