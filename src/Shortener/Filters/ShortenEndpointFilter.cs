@@ -20,6 +20,6 @@ public class ShortenEndpointFilter : IEndpointFilter
         return Results.BadRequest(Constants.Validation.InvalidShortenRequestUrl);
     }
 
-    private static bool IsValidUrl(string url)
+    public static bool IsValidUrl(string url)
        => Regex.IsMatch(url, pattern, RegexOptions.IgnoreCase);
 }
