@@ -60,15 +60,7 @@ app.MapGet("/{short_code}", async (
 
     return Results.Redirect(destinationUrl);
 });
-
-
-
-app.MapGet("/feedback", () =>
-{
-    return Results.Ok("Please do it!");
-});
-
-
+  
 app.Run();
 
 
