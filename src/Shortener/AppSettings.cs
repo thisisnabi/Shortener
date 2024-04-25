@@ -5,6 +5,8 @@ public class AppSettings
     public MongoDbSetting MongoDbSetting { get; set; } = null!;
 
     public string BaseUrl { get; set; } = null!;
+
+    public int ShortCodeLength { get; set; }
 }
 
 

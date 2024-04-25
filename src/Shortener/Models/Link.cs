@@ -8,7 +8,7 @@ public class Link
 {
     public ObjectId Id { get; set; }
 
-    public string ShortenUrl { get; set; } = null!;
+    public string ShortenCode { get; set; } = null!;
     public string DestinationUrl { get; set; } = null!;
     public DateTime CreatedOn { get; set; }
    
