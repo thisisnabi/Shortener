@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: "\U0001F69A Get latest code"
+      - name: 🚚 Get latest code
         uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -21,17 +21,18 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
+        
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: "\U0001F69A Get latest code"
-        uses: actions/checkout@v4
-      - uses: actions@setup-node@v3
-        with:
-          node-version: '18'
-      - name: liara-deploy
-        env:
-          LIARA_TOKEN: '${{ secrets.LIARA_API_TOKEN }}'
-        run: |
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+          node-version: "18"
+    - name: update-liara
+      env:
+        LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+      run: |
           npm i -g @liara/cli@5
-          liara deploy --api-token="$LIARA_TOKEN" --no-app-logs        
+          liara deploy --api-token="$LIARA_TOKEN" --no-app-logs
