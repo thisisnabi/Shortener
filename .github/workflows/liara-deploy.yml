@@ -29,23 +29,3 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: install node.js
-      uses:  actions@setup-node@v3
-      with:
-          node-version: "18"
-          
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
-      
-    - name: liara-deploy
-      env:
-        LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
-      run: |
-          npm i -g @liara/cli@5
-          liara deploy --api-token="$LIARA_TOKEN" --no-app-logs        
-
-      
