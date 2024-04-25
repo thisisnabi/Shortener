@@ -44,19 +44,20 @@ app.MapPost("/shorten", async (
     CancellationToken cancellationToken
     ) =>
 {
-    return await shortenService.GetShortenUrl(request.Url, cancellationToken);
+    return await shortenService.GenerateShortenUrlAsync(request.Url, cancellationToken);
 });
-
-
-
-
-
-
-
-
-
-
-
+ 
+app.MapGet("/{short_code}", async (
+    [FromRoute(Name = "short_code")] string ShortCode,
+    ShortenUrlService shortenService,
+    CancellationToken cancellationToken
+    ) =>
+{
+    var destinationUrl = await shortenService.GetDestinationUrlAsync(ShortCode, cancellationToken);
+     
+    return Results.Redirect(destinationUrl);
+});
+ 
 app.Run();
 
 

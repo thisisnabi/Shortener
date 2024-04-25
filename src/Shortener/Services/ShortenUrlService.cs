@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Shortener.Models;
 using Shortener.Persistence;
 using System.Security.Cryptography;
@@ -18,7 +19,7 @@ public class ShortenUrlService
         _appSettings = options.Value;
     }
 
-    public async Task<string> GetShortenUrl(string destinationUrl, CancellationToken cancellation)
+    public async Task<string> GenerateShortenUrlAsync(string destinationUrl, CancellationToken cancellation)
     {
         var shortenCode = GenerateCode(destinationUrl);
 
@@ -54,5 +55,17 @@ public class ShortenUrlService
 
         // TODO: Use custom exception
         throw new Exception(Constants.Exceptions.FailedGenerateUniqueCode);
+    }
+
+    internal async Task<string> GetDestinationUrlAsync(string shortCode, CancellationToken cancellationToken)
+    {
+        var link = await _dbContext.Links.FirstOrDefaultAsync(x => x.ShortenCode == shortCode, cancellationToken);
+
+        if (link is null)
+        {
+            // TODO: Please decluare a custom exception
+            throw new Exception("Invalid shorten code!");
+        }
+        return link.DestinationUrl;
     }
 }
