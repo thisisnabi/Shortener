@@ -71,13 +71,21 @@ public async Task<string> GenerateShortenUrlAsync(string destinationUrl, Cancell
 ```
 
 
-
-
-
-
 ### Redirection Mechanism
+Set up a redirection mechanism that maps incoming requests for shortened URLs to their corresponding long URLs. When a user accesses a shortened URL.
+![image](https://github.com/thisisnabi/Shortener/assets/3371886/8d078405-f5a4-4264-844f-bfb550396ee4)
+```csharp
+app.MapGet("/{short_code}", async (
+    [FromRoute(Name = "short_code")] string ShortCode,
+    ShortenUrlService shortenService,
+    CancellationToken cancellationToken)
+=> {
+    var destinationUrl = await shortenService.GetDestinationUrlAsync(ShortCode, cancellationToken);
 
-
+    return Results.Redirect(destinationUrl);
+});
+```
+> The service should redirect them seamlessly to the original destination URL without any noticeable delay.
 
 
 
