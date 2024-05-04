@@ -1,6 +1,6 @@
 name: Shortener
 env:
-  DOTNET_VERSION: '7'
+  DOTNET_VERSION: '8'
 'on':
   pull_request:
     branches:
