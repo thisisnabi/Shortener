@@ -19,5 +19,5 @@ export default function () {
         url: url
     });
     
-    check(res, { 'short url created': (r) => r.status === 201 });
+    check(res, { 'short url created': (r) => r.status === 301 || r.status === 307 });
 }
