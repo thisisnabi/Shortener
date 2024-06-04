@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3B69AAEA-F00
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F408CA2A-983F-4922-BD2D-E9214166F897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shortener.LoadTests", "tests\Shortener.LoadTests\Shortener.LoadTests.csproj", "{143474DA-E6D6-4EF3-9434-B518F5F908E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A54D7EB4-D437-4F2C-9FCD-32BCFA5634C9} = {3B69AAEA-F008-492B-AB58-603E9D5BA832}
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF} = {F408CA2A-983F-4922-BD2D-E9214166F897}
+		{143474DA-E6D6-4EF3-9434-B518F5F908E0} = {F408CA2A-983F-4922-BD2D-E9214166F897}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B750418C-61F1-4C34-BA1E-E808446CF320}
