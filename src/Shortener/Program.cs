@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shortener;
-using Shortener.Contracts;
-using Shortener.Filters;
-using Shortener.Persistence;
-using Shortener.Services;
+using Shortener.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<ShortenUrlService>();
+builder.Services.AddSingleton<ShortenDiagnostic>();
 
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(builder.Configuration);
@@ -31,36 +26,17 @@ builder.Services.AddDbContext<ShortenerDbContext>(options =>
                        settings.MongoDbSetting.DatabaseName);
 });
 
-
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
-
-app.MapPost("/shorten", async (
-    [FromBody] ShortenRequest request,
-    ShortenUrlService shortenService,
-    CancellationToken cancellationToken
-    ) =>
-{
-     
-    return await shortenService.GenerateShortenUrlAsync(request.Url, cancellationToken);
-}).AddEndpointFilter<ShortenEndpointFilter>();
-
-app.MapGet("/{short_code}", async (
-    [FromRoute(Name = "short_code")] string ShortCode,
-    ShortenUrlService shortenService,
-    CancellationToken cancellationToken
-    ) =>
-{
-    var destinationUrl = await shortenService.GetDestinationUrlAsync(ShortCode, cancellationToken);
-
-    return Results.Redirect(destinationUrl);
-});
-  
+ 
+app.MapShortenEndpoint();
+app.MapRedirectEndpoint();
+ 
+ 
 app.Run();
 
 
