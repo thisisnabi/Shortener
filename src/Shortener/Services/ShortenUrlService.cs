@@ -29,7 +29,7 @@ public class ShortenUrlService
 
     public async Task<string> GenerateShortenUrlAsync(string destinationUrl, CancellationToken cancellation)
     {
-        var shortenCode = GenerateCode(destinationUrl);
+        var shortenCode = await GenerateCode(destinationUrl);
 
         var link = new Link
         {
@@ -45,21 +45,20 @@ public class ShortenUrlService
         return $"{_appSettings.BaseUrl}/{shortenCode}";
     }
 
-    public string GenerateCode(string longUrl)
+    private async Task<string> GenerateCode(string longUrl)
     {
         using MD5 md5 = MD5.Create();
 
-        byte[] hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
-        string hashCode = BitConverter.ToString(hashBytes)
-                                      .Replace(oldValue: "-", newValue: "")
-                                      .ToLower();
+        var hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
+        var hashCode = BitConverter.ToString(hashBytes)
+            .Replace(oldValue: "-", newValue: "")
+            .ToLower();
 
-        for (int i = 0; i <= hashCode.Length - _appSettings.ShortCodeLength; i++)
+        for (var i = 0; i <= hashCode.Length - _appSettings.ShortCodeLength; i++)
         {
-            string candidateCode = hashCode.Substring(i, _appSettings.ShortCodeLength);
-            // TODO: duplicated check 
-
-            return candidateCode;
+            var candidateCode = hashCode.Substring(i, _appSettings.ShortCodeLength);
+            if (!await CheckDuplicate(candidateCode))
+                return candidateCode;
         }
 
         // TODO: Use custom exception
@@ -86,5 +85,10 @@ public class ShortenUrlService
         _shortenDiagnostic.AddFailedRedirection();
         // TODO: Please decluare a custom exception
         throw new Exception("Invalid shorten code!");
+    }
+
+    private async Task<bool> CheckDuplicate(string shortCode)
+    {
+        return await _dbContext.Links.AnyAsync(r => r.ShortenCode == shortCode);
     }
 }
