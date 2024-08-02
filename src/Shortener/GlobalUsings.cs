@@ -6,3 +6,5 @@ global using Shortener.Filters;
 global using Shortener.Persistence;
 global using Shortener.Services;
 global using Shortener.Endpoints;
+global using Shortener.Diagnostics;
+global using Shortener.Extensions;
