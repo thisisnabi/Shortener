@@ -4,7 +4,7 @@ This is a URL shortener service implemented in ASP.NET Core and MongoDB. It allo
 
 ## Features
 
-- Shorten long URLs into unique, short codes
+- Shorten long URLs into unique, shortcodes
 - Redirect users from short URLs to original long URLs
 - MongoDB database for persisting data
 - RESTful API for easy integration with other applications
@@ -16,6 +16,8 @@ This is a URL shortener service implemented in ASP.NET Core and MongoDB. It allo
 - C#
 - Minimal APIs
 - InMemory Cache
+- Open Telemetry
+- Prometheus
 
 ## Installation
 
@@ -26,11 +28,11 @@ git clone https://github.com/thisisnabi/Shortener.git
 ```
 
 ## Give a Star! ⭐
-If you find this project helpful or interesting, please consider giving it a star on GitHub. It helps to support the project and gives recognition to the contributors.
+If you find this project helpful or interesting, please consider giving it a star on GitHub. It helps support the project and recognizes the contributors.
 
 
 ## Getting Started
-To get started with the URL shortener service, follow the installation instructions provided in the Installation section above. Once the service is up and running, you can begin using the API endpoints to shorten URLs, track statistics, and manage your shortened links.
+To start with the URL shortener service, follow the installation instructions in the Installation section above. Once the service is up and running, you can begin using the API endpoints to shorten URLs, track statistics, and manage your shortened links.
 
 ### Problem
 
@@ -48,11 +50,11 @@ To address the problem of long URLs and make them more manageable for users, a U
 
 
 ### Shortening URLs
-Implement a URL shortening algorithm to generate unique, short codes or aliases for long URLs. This algorithm should produce short codes that are both compact and unlikely to collide with existing codes in the system.
+Implement a URL shortening algorithm to generate unique, shortcodes or aliases for long URLs. This algorithm should produce compact shortcodes that are unlikely to collide with existing codes in the system.
 ![image](https://github.com/thisisnabi/Shortener/assets/3371886/9d53ddd5-b68a-4899-9843-3d3b4185de18)
 
 ```csharp
-public async Task<string> GenerateShortenUrlAsync(string destinationUrl, CancellationToken cancellation)
+public async Task<string> GenerateShortenUrlAsync(string destination, CancellationToken cancellation)
 {
     var shortenCode = GenerateCode(destinationUrl);
 
@@ -87,6 +89,36 @@ app.MapGet("/{short_code}", async (
 ```
 > The service should redirect them seamlessly to the original destination URL without any noticeable delay.
 
+
+### Metrics
+By systematically capturing and analyzing these metrics, marketing teams can gain insights into the effectiveness of their campaigns, identify potential issues, and optimize their strategies to enhance user engagement and achieve better outcomes.
+
+```csharp
+public sealed class ShortenDiagnostic
+{
+    public const string MeterName = "ThisIsNabi.Shorten";
+
+    public const string RedirectionMetricName = "ThisIsNabi.Shorten.Redirection";
+    public const string FailedRedirectionMetricName = "ThisIsNabi.Shorten.Redirection.Failed";
+
+    private readonly Counter<long> _redirectionCounter;
+    private readonly Counter<long> _failedRedirectionCounter;
+
+    public ShortenDiagnostic(IMeterFactory meterFactory)
+    {
+        var meter = meterFactory.Create(MeterName);
+        _redirectionCounter = meter.CreateCounter<long>(RedirectionMetricName);
+        _failedRedirectionCounter = meter.CreateCounter<long>(FailedRedirectionMetricName);
+    }
+
+    private const string RedirectionTagName = "Label";
+    public void AddRedirection(string title)
+        => _redirectionCounter.Add(1, new KeyValuePair<string, object?>(RedirectionTagName, title));
+
+    public void AddFailedRedirection()
+        => _failedRedirectionCounter.Add(1);
+}
+```
 
 
 
