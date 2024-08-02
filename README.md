@@ -8,6 +8,7 @@ This is a URL shortener service implemented in ASP.NET Core and MongoDB. It allo
 - Redirect users from short URLs to original long URLs
 - MongoDB database for persisting data
 - RESTful API for easy integration with other applications
+- Metrics
 
 ## Technologies Used
 
