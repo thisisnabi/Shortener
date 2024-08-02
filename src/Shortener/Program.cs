@@ -1,9 +1,45 @@
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.SystemConsole.Themes;
 using Shortener.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+
+builder.Logging.ClearProviders();
+
+builder.Host.UseSerilog((webHostBuilderContext, loggerConfiguration) =>
+{
+    loggerConfiguration.ReadFrom.Configuration(webHostBuilderContext.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("service_name", "Nabi");
+
+    loggerConfiguration.WriteTo.Async(loggerSinkConfiguration =>
+    {
+        loggerSinkConfiguration.Console(LogEventLevel.Debug,
+            theme: AnsiConsoleTheme.Code,
+            outputTemplate:
+            "[{Timestamp:HH:mm:ss} {Level:u3} <{SourceContext}>] {Message:lj} {Properties:j}{NewLine}{Exception}");
  
+
+        loggerSinkConfiguration.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://127.0.0.1:9200"))
+        {
+            AutoRegisterTemplate = false,
+            ConnectionTimeout = TimeSpan.FromSeconds(30),
+            InlineFields = true,
+            MinimumLogEventLevel = LogEventLevel.Information,
+            IndexDecider = (logEvent, dateTimeOffset) =>
+                $"shortener-{dateTimeOffset:yyyy-MM-dd}-{logEvent.Level.ToString().ToLowerInvariant()}",
+            EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
+                               EmitEventFailureHandling.RaiseCallback,
+            FailureCallback = logEvent => Console.WriteLine(logEvent.Exception!.ToString())
+        });
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

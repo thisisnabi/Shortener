@@ -12,23 +12,27 @@ public class ShortenUrlService
     private readonly ShortenerDbContext _dbContext;
     private readonly AppSettings _appSettings;
     private readonly IMemoryCache _memoryCache;
-
+    private readonly ILogger<ShortenUrlService> _logger;
     private readonly ShortenDiagnostic _shortenDiagnostic;
 
     public ShortenUrlService(
         ShortenerDbContext dbContext,
         IMemoryCache memoryCache,
         IOptions<AppSettings> options,
-        ShortenDiagnostic shortenDiagnostic)
+        ShortenDiagnostic shortenDiagnostic,
+        ILogger<ShortenUrlService> logger)
     {
         _dbContext = dbContext;
         _appSettings = options.Value;
         _memoryCache = memoryCache;
         _shortenDiagnostic = shortenDiagnostic;
+        _logger = logger;
     }
 
     public async Task<string> GenerateShortenUrlAsync(string destinationUrl, CancellationToken cancellation)
     {
+        _logger.LogInformation("Retriving request {destinationUrl}", destinationUrl);
+
         var shortenCode = GenerateCode(destinationUrl);
 
         var link = new Link
