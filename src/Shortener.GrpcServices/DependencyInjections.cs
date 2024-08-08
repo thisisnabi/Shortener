@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Shortener.GrpcServices
+namespace Shortener.GrpcServices;
+
+public static class DependencyInjections
 {
-    public static class DependencyInjections
+    public static IServiceCollection AddShortenGrpcClient(this IServiceCollection services, string url)
     {
-        public static IServiceCollection AddShortenGrpcService(this IServiceCollection services, string url)
-        {
-            services.AddGrpcClient<ShortenUrl.ShortenUrlClient>(o =>    {
-                o.Address = new Uri(url);
-            });
-            return services;
-        }
+        services.AddGrpcClient<ShortenUrl.ShortenUrlClient>(o =>    {
+            o.Address = new Uri(url);
+        });
+        return services;
     }
 }
