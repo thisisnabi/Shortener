@@ -3,15 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shortener", "src\Shortener\Shortener.csproj", "{A54D7EB4-D437-4F2C-9FCD-32BCFA5634C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shortener", "src\Shortener\Shortener.csproj", "{A54D7EB4-D437-4F2C-9FCD-32BCFA5634C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shortener.UnitTests", "tests\Shortener.UnitTests\Shortener.UnitTests.csproj", "{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shortener.UnitTests", "tests\Shortener.UnitTests\Shortener.UnitTests.csproj", "{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3B69AAEA-F008-492B-AB58-603E9D5BA832}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F408CA2A-983F-4922-BD2D-E9214166F897}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shortener.GrpcServices", "src\Shortener.GrpcServices\Shortener.GrpcServices.csproj", "{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shortener.LoadTests", "tests\Shortener.LoadTests\Shortener.LoadTests.csproj", "{143474DA-E6D6-4EF3-9434-B518F5F908E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A51B708E-D6F5-4933-BD48-17CAD258EEF8}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{143474DA-E6D6-4EF3-9434-B518F5F908E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,6 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A54D7EB4-D437-4F2C-9FCD-32BCFA5634C9} = {3B69AAEA-F008-492B-AB58-603E9D5BA832}
 		{5BC53C0C-DFC4-436B-8DD8-7BC4A6EE54AF} = {F408CA2A-983F-4922-BD2D-E9214166F897}
+		{E8A8A0B2-60DB-4C46-9AB4-85AE467DAF4B} = {3B69AAEA-F008-492B-AB58-603E9D5BA832}
 		{143474DA-E6D6-4EF3-9434-B518F5F908E0} = {F408CA2A-983F-4922-BD2D-E9214166F897}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

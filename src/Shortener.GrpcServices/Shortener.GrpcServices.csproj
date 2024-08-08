@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/thisisnabi/Shortener</RepositoryUrl>
+	<Version>0.0.3</Version>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+		<Protobuf Include="Protos/*.proto" GrpcServices="Both" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.65.0" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.65.0" />
+
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
