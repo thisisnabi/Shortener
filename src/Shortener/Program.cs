@@ -1,6 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
-
 const string shorten_bad_request = "The URL query string is required and needs to be well formed";
 
 var builder = WebApplication.CreateBuilder(args);
