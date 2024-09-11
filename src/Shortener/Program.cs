@@ -1,75 +1,61 @@
+using System.Security.Cryptography;
+using System.Text;
+
+const string shorten_bad_request = "The URL query string is required and needs to be well formed";
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureObservability();
-builder.ConfigureAppSettings();
-builder.ConfigureDbContext();
- 
-builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMemoryCache();
-builder.Services.AddScoped<ShortenUrlService>();
 
 builder.Host.UseOrleans(static siloBuilder =>
 {
     siloBuilder.UseLocalhostClustering();
     siloBuilder.AddMemoryGrainStorage("urls");
 });
-
+ 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
-app.MapShortenEndpoint();
-app.MapRedirectEndpoint();
-
-app.MapPrometheusScrapingEndpoint();
-
 app.MapGet("/shorten",
-    static async (IGrainFactory grains, HttpRequest request, string url) =>
+    static async (string url, string marketingTag, IGrainFactory grains, IConfiguration configuration) =>
     {
-        var host = $"{request.Scheme}://{request.Host.Value}";
-
-        if (string.IsNullOrWhiteSpace(url) ||
-            Uri.IsWellFormedUriString(url, UriKind.Absolute) is false)
+        if (string.IsNullOrWhiteSpace(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute) is false)
         {
-            return Results.BadRequest($"""
-                The URL query string is required and needs to be well formed.
-                Consider, ${host}/shorten?url=https://www.microsoft.com.
-                """);
+            return Results.BadRequest(shorten_bad_request);
         }
 
-        var shortenedRouteSegment = Guid.NewGuid().GetHashCode().ToString("X");
+        var shortCode = GenerateCode(url);
 
-        var shortenerGrain =
-            grains.GetGrain<IUrlShortenerGrain>(shortenedRouteSegment);
-
-        await shortenerGrain.SetUrl(url);
-
-        var resultBuilder = new UriBuilder(host)
-        {
-            Path = $"/go/{shortenedRouteSegment}"
-        };
-
+        var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
+        await shortenerGrain.SetUrl(url, marketingTag);
+         
+        var resultBuilder = new UriBuilder(configuration["BaseUrl"]!) { Path = $"/{shortCode}" };
         return Results.Ok(resultBuilder.Uri);
-    });
+});
 
-app.MapGet("/x/{shortenedRouteSegment:required}",
-    static async (IGrainFactory grains, string shortenedRouteSegment) =>
+app.MapGet("/{short_code:required}",
+    static async (IGrainFactory grains, [FromRoute(Name = "short_code")] string shortCode) =>
     {
-        var shortenerGrain =
-            grains.GetGrain<IUrlShortenerGrain>(shortenedRouteSegment);
+        var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
 
         var url = await shortenerGrain.GetUrl();
-
         var redirectBuilder = new UriBuilder(url);
-
         return Results.Redirect(redirectBuilder.Uri.ToString());
     });
-
+  
 app.Run();
 
 
+static string GenerateCode(string longUrl)
+{
+    using MD5 md5 = MD5.Create();
+    var hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
+    var hashCode = BitConverter.ToString(hashBytes)
+                               .Replace(oldValue: "-", newValue: "")
+                               .ToLower();
+
+    return hashCode.Substring(10);
+}
