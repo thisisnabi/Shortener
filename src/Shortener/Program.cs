@@ -17,7 +17,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapGet("/shorten",
-    static async (string url, string marketingTag, IGrainFactory grains, IConfiguration configuration) =>
+    static async (string url, IGrainFactory grains, IConfiguration configuration) =>
     {
         if (string.IsNullOrWhiteSpace(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute) is false)
         {
@@ -27,7 +27,7 @@ app.MapGet("/shorten",
         var shortCode = GenerateCode(url);
 
         var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
-        await shortenerGrain.SetUrl(url, marketingTag);
+        await shortenerGrain.SetUrl(url);
          
         var resultBuilder = new UriBuilder(configuration["BaseUrl"]!) { Path = $"/{shortCode}" };
         return Results.Ok(resultBuilder.Uri);

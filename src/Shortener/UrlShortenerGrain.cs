@@ -2,7 +2,7 @@
 
 public interface IUrlShortenerGrain : IGrainWithStringKey
 {
-    Task SetUrl(string longUrl, string marketingTag);
+    Task SetUrl(string longUrl);
 
     Task<string> GetUrl();
 }
@@ -15,8 +15,6 @@ public sealed record class UrlDetails
 
     [Id(1)]
     public string ShortCode { get; set; } = "";
-
-    public string MarketingTag { get; set; } = "";
 }
 
 public sealed class UrlShortenerGrain([PersistentState(stateName: "url", storageName: "urls")] IPersistentState<UrlDetails> state) : Grain, IUrlShortenerGrain
@@ -25,7 +23,7 @@ public sealed class UrlShortenerGrain([PersistentState(stateName: "url", storage
     public Task<string> GetUrl() => 
         Task.FromResult(state.State.LongUrl);
 
-    public async Task SetUrl(string longUrl, string marketingTag)
+    public async Task SetUrl(string longUrl)
     {
         state.State = new()
         {
