@@ -10,9 +10,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ShortenUrlService>();
 
-builder.Services.AddGrpc(options =>
+builder.Host.UseOrleans(static siloBuilder =>
 {
-    options.EnableDetailedErrors = true;
+    siloBuilder.UseLocalhostClustering();
+    siloBuilder.AddMemoryGrainStorage("urls");
 });
 
 var app = builder.Build();
