@@ -27,7 +27,7 @@ app.MapGet("/shorten",
         var shortCode = GenerateCode(url);
 
         var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
-        await shortenerGrain.SetUrl(url);
+        await shortenerGrain.SetLongUrl(url);
          
         var resultBuilder = new UriBuilder(configuration["BaseUrl"]!) { Path = $"/{shortCode}" };
         return Results.Ok(resultBuilder.Uri);
@@ -38,7 +38,7 @@ app.MapGet("/{short_code:required}",
     {
         var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
 
-        var url = await shortenerGrain.GetUrl();
+        var url = await shortenerGrain.GetLongUrl();
         var redirectBuilder = new UriBuilder(url);
         return Results.Redirect(redirectBuilder.Uri.ToString());
     });

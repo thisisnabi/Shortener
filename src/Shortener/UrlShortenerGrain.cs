@@ -2,9 +2,9 @@
 
 public interface IUrlShortenerGrain : IGrainWithStringKey
 {
-    Task SetUrl(string longUrl);
+    Task SetLongUrl(string longUrl);
 
-    Task<string> GetUrl();
+    Task<string> GetLongUrl();
 }
 
 [GenerateSerializer, Alias(nameof(UrlDetails))]
@@ -20,10 +20,10 @@ public sealed record class UrlDetails
 public sealed class UrlShortenerGrain([PersistentState(stateName: "url", storageName: "urls")] IPersistentState<UrlDetails> state) : Grain, IUrlShortenerGrain
 {
 
-    public Task<string> GetUrl() => 
+    public Task<string> GetLongUrl() => 
         Task.FromResult(state.State.LongUrl);
 
-    public async Task SetUrl(string longUrl)
+    public async Task SetLongUrl(string longUrl)
     {
         state.State = new()
         {
