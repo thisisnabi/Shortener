@@ -33,7 +33,6 @@ app.MapGet("/shorten",
     {
         var host = $"{request.Scheme}://{request.Host.Value}";
 
-        // Validate the URL query string.
         if (string.IsNullOrWhiteSpace(url) ||
             Uri.IsWellFormedUriString(url, UriKind.Absolute) is false)
         {
@@ -43,16 +42,13 @@ app.MapGet("/shorten",
                 """);
         }
 
-        // Create a unique, short ID
         var shortenedRouteSegment = Guid.NewGuid().GetHashCode().ToString("X");
 
-        // Create and persist a grain with the shortened ID and full URL
         var shortenerGrain =
             grains.GetGrain<IUrlShortenerGrain>(shortenedRouteSegment);
 
         await shortenerGrain.SetUrl(url);
 
-        // Return the shortened URL for later use
         var resultBuilder = new UriBuilder(host)
         {
             Path = $"/go/{shortenedRouteSegment}"
@@ -64,13 +60,11 @@ app.MapGet("/shorten",
 app.MapGet("/x/{shortenedRouteSegment:required}",
     static async (IGrainFactory grains, string shortenedRouteSegment) =>
     {
-        // Retrieve the grain using the shortened ID and url to the original URL
         var shortenerGrain =
             grains.GetGrain<IUrlShortenerGrain>(shortenedRouteSegment);
 
         var url = await shortenerGrain.GetUrl();
 
-        // Handles missing schemes, defaults to "http://".
         var redirectBuilder = new UriBuilder(url);
 
         return Results.Redirect(redirectBuilder.Uri.ToString());
