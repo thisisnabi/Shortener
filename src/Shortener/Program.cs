@@ -33,16 +33,27 @@ app.MapGet("/shorten",
         return Results.Ok(resultBuilder.Uri);
 });
 
+
+
 app.MapGet("/{short_code:required}",
     static async (IGrainFactory grains, [FromRoute(Name = "short_code")] string shortCode) =>
     {
         var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
 
         var url = await shortenerGrain.GetLongUrl();
-        var redirectBuilder = new UriBuilder(url);
-        return Results.Redirect(redirectBuilder.Uri.ToString());
+
+        if (Uri.TryCreate(url, UriKind.Absolute, out var validatedUri))
+        {
+            var redirectBuilder = new UriBuilder(validatedUri);
+            return Results.Redirect(redirectBuilder.Uri.ToString());
+        }
+        else
+        {
+            return Results.BadRequest("Invalid URL");
+        }
     });
-  
+
+
 app.Run();
 
 
@@ -56,3 +67,7 @@ static string GenerateCode(string longUrl)
 
     return hashCode.Substring(10);
 }
+
+
+
+public partial class Program { }
