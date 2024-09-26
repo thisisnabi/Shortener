@@ -1,0 +1,29 @@
+name: shortener
+
+env:
+  DOTNET_VERSION: '8'
+
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Get the latest code
+          uses: actions/checkout@v3
+           
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+              
+        - name: Restore
+          run: dotnet restore
+        - name: Build
+          run: dotnet build --no-restore
+          
+
+
+
+  
