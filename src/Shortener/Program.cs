@@ -57,18 +57,17 @@ app.MapGet("/{short_code:required}",
 
 app.Run();
 
+ 
+public partial class Program {
+   public  static string GenerateCode(string longUrl)
+   {
+        using MD5 md5 = MD5.Create();
+        var hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
+        var hashCode = BitConverter.ToString(hashBytes)
+                                   .Replace(oldValue: "-", newValue: "")
+                                   .ToLower();
 
-static string GenerateCode(string longUrl)
-{
-    using MD5 md5 = MD5.Create();
-    var hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
-    var hashCode = BitConverter.ToString(hashBytes)
-                               .Replace(oldValue: "-", newValue: "")
-                               .ToLower();
+        return hashCode.Substring(0,length:10);
+    }
 
-    return hashCode.Substring(10);
 }
-
-
-
-public partial class Program { }
