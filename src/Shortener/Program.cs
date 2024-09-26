@@ -13,7 +13,7 @@ builder.Host.UseOrleans(static siloBuilder =>
  
 var app = builder.Build();
 
-app.UseSagger();
+app.UseSwagger();
 
 app.UseSwaggerUI();
 
