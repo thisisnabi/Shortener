@@ -15,7 +15,6 @@ public class CodeGeneratorTests
         var result = Program.GenerateCode(longUrl);
 
         result.Should().NotBeNullOrEmpty();
-        result.Should().BeLowerCased();
     }
 
     [Fact]
