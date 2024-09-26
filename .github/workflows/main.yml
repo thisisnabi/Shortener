@@ -27,6 +27,20 @@ jobs:
         - name: Test
           run: dotnet test --no-build
           
+        - name: GPT Reviewer
+          uses: anc95/ChatGPT-CodeReview@main
+          env:
+            GITHUB_TOKEN: ${{ secrets.GTOKEN }}
+            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+            LANGUAGE: English
+            OPENAI_API_ENDPOINT: https://api.openai.com/v1
+            MODEL: GPT-3.5-turbo 
+            PROMPT: "Please check the naming method convention and suggest best in the following code diff"
+            top_p: 1 
+            temperature: 1
+            max_tokens: 10000
+            MAX_PATCH_LENGTH: 10000           
+          
 
 
 
