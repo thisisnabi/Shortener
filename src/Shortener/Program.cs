@@ -14,6 +14,7 @@ builder.Host.UseOrleans(static siloBuilder =>
 var app = builder.Build();
 
 app.UseSwagger();
+
 app.UseSwaggerUI();
 
 app.MapGet("/shorten",
