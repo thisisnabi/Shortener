@@ -34,7 +34,7 @@ jobs:
             OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
             LANGUAGE: English
             OPENAI_API_ENDPOINT: https://api.openai.com/v1
-            MODEL: GPT-3.5-turbo 
+            MODEL: gpt-4o
             PROMPT: "Please check the naming method convention and suggest best in the following code diff"
             top_p: 1 
             temperature: 1
