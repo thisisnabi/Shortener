@@ -35,7 +35,7 @@ jobs:
             LANGUAGE: English
             OPENAI_API_ENDPOINT: https://api.openai.com/v1
             MODEL: gpt-3.5-turbo
-            PROMPT: " Please check if there are any confusions or irregularities in the following code diff:"
+            PROMPT: "Please check if there are any confusions or irregularities in the following code diff:"
             top_p: 1 
             temperature: 1
             max_tokens: 10000
