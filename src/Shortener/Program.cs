@@ -32,16 +32,13 @@ app.MapGet("/shorten",
         var resultBuilder = new UriBuilder(configuration["BaseUrl"]!) { Path = $"/{shortCode}" };
         return Results.Ok(resultBuilder.Uri);
 });
-
-
-
+ 
 app.MapGet("/{short_code:required}",
     static async (IGrainFactory grains, [FromRoute(Name = "short_code")] string shortCode) =>
     {
         var shortenerGrain = grains.GetGrain<IUrlShortenerGrain>(shortCode);
 
         var url = await shortenerGrain.GetLongUrl();
-
         if (Uri.TryCreate(url, UriKind.Absolute, out var validatedUri))
         {
             var redirectBuilder = new UriBuilder(validatedUri);
@@ -49,7 +46,7 @@ app.MapGet("/{short_code:required}",
         }
         else
         {
-            return Results.BadRequest("Invalid URL");
+            return Results.BadRequest("The provided URL is not valid. Please check the format and try again.");
         }
     });
 
